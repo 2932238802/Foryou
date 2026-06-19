@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心情不好？点我 💕</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    min-height: 100%;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d1 45%, #ff8fab 100%);
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+  }
+  .container {
+    text-align: center;
+    padding: 30px 20px;
+    position: relative;
+    z-index: 5;
+  }
+  h1 {
+    color: #fff;
+    font-size: 2.4rem;
+    text-shadow: 0 3px 10px rgba(255, 80, 130, 0.4);
+    margin-bottom: 8px;
+    animation: fadeDown 1s ease;
+  }
+  .sub {
+    color: #fff;
+    font-size: 1.05rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+    animation: fadeDown 1.4s ease;
+  }
+  .click-btn {
+    background: linear-gradient(145deg, #ff5c8a, #ff3b6b);
+    color: #fff;
+    border: none;
+    padding: 22px 50px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 60, 110, 0.5);
+    transition: transform 0.1s, box-shadow 0.2s;
+    font-family: inherit;
+    position: relative;
+    animation: breathe 2s ease-in-out infinite;
+  }
+  .click-btn:hover { box-shadow: 0 14px 32px rgba(255, 60, 110, 0.6); }
+  .click-btn:active { transform: scale(0.92); }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .counter {
+    margin-top: 28px;
+    color: #fff;
+    font-size: 0.95rem;
+    opacity: 0.85;
+    height: 22px;
+  }
+  /* 弹出的夸夸气泡 */
+  .praise {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    color: #ff3b6b;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 18px 32px;
+    border-radius: 40px;
+    box-shadow: 0 10px 30px rgba(255, 80, 130, 0.4);
+    pointer-events: none;
+    z-index: 50;
+    white-space: nowrap;
+    animation: popPraise 1.6s ease forwards;
+  }
+  @keyframes popPraise {
+    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    35% { transform: translate(-50%, -50%) scale(1); }
+    80% { opacity: 1; transform: translate(-50%, -120%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -160%) scale(0.9); }
+  }
+  /* 飘落爱心 */
+  .heart-particle {
+    position: fixed;
+    font-size: 22px;
+    pointer-events: none;
+    z-index: 40;
+    animation: floatUp 2.5s ease-in forwards;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(0.6) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-200px) scale(1.4) rotate(360deg); }
+  }
+  /* 兑换券弹窗 */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(120, 30, 60, 0.55);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .coupon {
+    background: linear-gradient(160deg, #fff8f0, #fff0f5);
+    border-radius: 24px;
+    max-width: 360px;
+    width: 100%;
+    padding: 30px 26px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    position: relative;
+    border: 3px dashed #ff8fab;
+    animation: popCoupon 0.6s cubic-bezier(.18,.89,.32,1.28);
+  }
+  @keyframes popCoupon {
+    0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .coupon .zongzi { font-size: 3rem; margin-bottom: 6px; }
+  .coupon h2 {
+    color: #ff3b6b;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+  .coupon .desc {
+    color: #b5546e;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .code-box {
+    background: #fff;
+    border: 2px solid #ffb3d1;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 1.05rem;
+    color: #ff3b6b;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+  .copy-btn {
+    background: linear-gradient(145deg, #ff5c8a, #ff3b6b);
+    color: #fff;
+    border: none;
+    padding: 14px 30px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(255, 60, 110, 0.4);
+    font-family: inherit;
+    width: 100%;
+    transition: transform 0.1s;
+  }
+  .copy-btn:active { transform: scale(0.95); }
+  .copy-tip {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #4caf50;
+    height: 18px;
+    font-weight: bold;
+  }
+  .close-coupon {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 1.5rem;
+    color: #ffb3d1;
+    cursor: pointer;
+    background: none;
+    border: none;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>心情不好？😢</h1>
+    <p class="sub">没关系，这里有人想哄哄你～</p>
+    <button class="click-btn" id="clickBtn">心情不好就狠狠点我！👆</button>
+    <div class="counter" id="counter"></div>
+  </div>
+
+  <!-- 兑换券弹窗 -->
+  <div class="overlay" id="overlay">
+    <div class="coupon">
+      <button class="close-coupon" id="closeCoupon">×</button>
+      <div class="zongzi">🥟🎁🥟</div>
+      <h2>端午礼物兑换券</h2>
+      <p class="desc">恭喜你点满 10 次！<br>解锁隐藏惊喜～<br>复制下面这串，发给我就能兑换啦 💝</p>
+      <div class="code-box" id="codeBox"></div>
+      <button class="copy-btn" id="copyBtn">📋 一键复制兑换码</button>
+      <div class="copy-tip" id="copyTip"></div>
+    </div>
+  </div>
+
+<script>
+  // —— 夸夸语库 ——
+  const praises = [
+    "岑姐姐天下第一好！",
+    "艳姐姐天下第一好！",
+    "啟姐姐天下第一好！",
+    "全世界最好的就是你！",
+    "笑一个嘛，你笑起来最好看 😊",
+    "不开心的事都让它走开！",
+    "你已经超级棒啦 💪",
+    "有人偷偷在心疼你哦 💕",
+    "抱抱你，一切都会好起来的 🤗",
+    "你值得世界上所有的温柔 🌸",
+    "再坚持一下，糖果在后面等你 🍬",
+    "你是我最喜欢的小可爱 💗",
+    "烦恼退退退！开心进进进！✨",
+    "你眨眨眼，坏心情就溜走啦 👀"
+  ];
+
+  const REDEEM_CODE = "🎁端午礼物兑换券 No.0610 —— 凭此券找我兑换端午礼物一份（外加抱抱一个）💝 有效期：永久";
+
+  let count = 0;
+  const btn = document.getElementById('clickBtn');
+  const counter = document.getElementById('counter');
+  const overlay = document.getElementById('overlay');
+  const codeBox = document.getElementById('codeBox');
+  const copyBtn = document.getElementById('copyBtn');
+  const copyTip = document.getElementById('copyTip');
+  const hearts = ['💕','💗','💖','💝','❤️','🩷','💞','🌸','✨'];
+
+  function showPraise() {
+    const p = document.createElement('div');
+    p.className = 'praise';
+    p.textContent = praises[Math.floor(Math.random() * praises.length)];
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1600);
+  }
+
+  function burstHearts() {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < 8; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart-particle';
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      const angle = (Math.PI * 2 * i) / 8;
+      const dist = 60 + Math.random() * 50;
+      h.style.left = (cx + Math.cos(angle) * dist) + 'px';
+      h.style.top = (cy + Math.sin(angle) * dist) + 'px';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 2500);
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    count++;
+    burstHearts();
+    showPraise();
+
+    if (count < 10) {
+      counter.textContent = `已经点了 ${count} 次啦～（点满 10 次有惊喜哦）`;
+    } else if (count === 10) {
+      counter.textContent = `🎉 解锁隐藏惊喜！`;
+      codeBox.textContent = REDEEM_CODE;
+      setTimeout(() => { overlay.style.display = 'flex'; }, 400);
+    } else {
+      counter.textContent = `你已经点了 ${count} 次啦，惊喜已解锁～`;
+    }
+  });
+
+  // 复制兑换码
+  copyBtn.addEventListener('click', () => {
+    const text = REDEEM_CODE;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        copyTip.textContent = "✅ 已复制！快粘贴到聊天框发给我～";
+      }).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  });
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      copyTip.textContent = "✅ 已复制！快粘贴到聊天框发给我～";
+    } catch (e) {
+      copyTip.textContent = "请长按选中上面的文字手动复制哦";
+    }
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('closeCoupon').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+</script>
+</body>
+</html>
